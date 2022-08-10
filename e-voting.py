@@ -39,4 +39,5 @@ async def addCandidate(name:str):
 @app.get("/ShowCandidate")
 async def ShowCandidate():
     Candidate = contract_instance.functions.ShowCandidate().call()
+    Candidate = str(Candidate)
     return {"Candidate": Candidate}
