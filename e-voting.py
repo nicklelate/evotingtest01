@@ -2,6 +2,7 @@ from web3 import Web3
 from web3 import EthereumTesterProvider
 from fastapi import FastAPI
 app = FastAPI()
+import json
 
 provider_url = 'https://rinkeby.infura.io/v3/5a5adcea95764d898c7e69d4c27f4c01'
 w3 = Web3(Web3.HTTPProvider(provider_url))
@@ -41,3 +42,54 @@ async def ShowCandidate():
     Candidate = contract_instance.functions.ShowCandidate().call()
     Candidate = str(Candidate)
     return {"Candidate": Candidate}
+
+def flexmessage():
+    flex ={
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "This is my first dynamic flex",
+        "size": "lg"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "message",
+          "label": "Click",
+          "text": "hello"
+        },
+        "style": "primary",
+        "height": "md",
+        "position": "relative",
+        "margin": "xxl"
+      }
+    ]
+  }
+}
+    return flex
+
+def botnoiformat(flexmessage):
+    output = {
+    "response_type": "object",
+    "line_payload": [{
+      "type": "flex",
+      "altText": "this is a flex message",
+      "contents": flexmessage
+    }]
+    }
+    return output
+
+my_flex = flexmessage()
+add_to_api = botnoiformat(my_flex)
+add_to_api = json.dumps(add_to_api)
+
+@app.get("/dynamic_flex")
+async def dynamic_flex():
+    my_flex = flexmessage()
+    add_to_api = botnoiformat(my_flex)
+    add_to_api = json.dumps(add_to_api)
+    return add_to_api
